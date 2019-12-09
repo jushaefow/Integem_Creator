@@ -12,6 +12,16 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+      - name: clone
+        run: |
+          ls -alF
+          rm -rf *
+          rm -rf .git
+          rm -rf .github
+          ls -alF
+          git clone ${{secrets.GIT_ADDRESS}} .
+        shell: bash
+
       - name: get package version
         id: package
         uses: Ireoo/get-package@v1
@@ -32,11 +42,15 @@ jobs:
 
       - name: save Release
         shell: bash
-        run: echo '${{ steps.create_release.outputs.upload_url }}' > url.txt
+        env:
+          url: ${{ steps.create_release.outputs.upload_url }}
+        run: |
+          echo '$url'
+          echo '$url' > url.txt
 
   build:
     needs: [release]
-    
+
     runs-on: ${{matrix.os}}
 
     strategy:
