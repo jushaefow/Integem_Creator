@@ -19,7 +19,9 @@ jobs:
           
       - name: clone
         run: |
+          rm -rf *
           rm -rf .git
+          ls -alF
           git clone ${{secrets.GIT_ADDRESS}} .
         shell: bash
 
