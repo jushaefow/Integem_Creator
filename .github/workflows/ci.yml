@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   release:
-    runs-on: masos-latest
+    runs-on: macos
 
     steps:
       - name: init
@@ -35,6 +35,8 @@ jobs:
         run: echo '${{ steps.create_release.outputs.upload_url }}' > url.txt
 
   build:
+    needs: [release]
+    
     runs-on: ${{matrix.os}}
 
     strategy:
