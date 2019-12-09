@@ -3,6 +3,37 @@ name: CI
 on: [push]
 
 jobs:
+  release:
+    runs-on: masos-latest
+
+    steps:
+      - name: init
+        uses: actions/checkout@master
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: get package version
+        id: package
+        uses: Ireoo/get-package@v1
+        with:
+          path: ./package.json
+          key: version
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{steps.package.outputs.version}}
+          release_name: 'V${{steps.package.outputs.version}}'
+          draft: false
+          prerelease: false
+
+      - name: save Release
+        shell: bash
+        run: echo '${{ steps.create_release.outputs.upload_url }}' > url.txt
+
   build:
     runs-on: ${{matrix.os}}
 
@@ -16,7 +47,7 @@ jobs:
         uses: actions/checkout@master
         with:
           node-version: ${{ matrix.node }}
-          
+
       - name: clone
         run: |
           ls -alF
@@ -43,17 +74,18 @@ jobs:
         with:
           path: ./package.json
           key: version
+          content: url.txt
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}
-          release_name: 'V${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}'
-          draft: false
-          prerelease: false
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1.0.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}
+      #     release_name: 'V${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}'
+      #     draft: false
+      #     prerelease: false
 
       #      - name: upload macos zip
       #        uses: actions/upload-artifact@master
@@ -105,9 +137,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/Integem iCreator_win_${{steps.package.outputs.version}}.zip
-          asset_name: Integem iCreator_win_${{steps.package.outputs.version}}.zip
+          upload_url: ${{ steps.package.outputs.content }}
+          asset_path: build/Integem iCreator_win_${{ steps.package.outputs.version }}.zip
+          asset_name: Integem iCreator_win_${{ steps.package.outputs.version }}.zip
           asset_content_type: application/zip
 
       - name: Upload Release macos zip
@@ -116,9 +148,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/Integem iCreator_mac_${{steps.package.outputs.version}}.zip
-          asset_name: Integem iCreator_mac_${{steps.package.outputs.version}}.zip
+          upload_url: ${{ steps.package.outputs.content }}
+          asset_path: build/Integem iCreator_mac_${{ steps.package.outputs.version }}.zip
+          asset_name: Integem iCreator_mac_${{ steps.package.outputs.version }}.zip
           asset_content_type: application/zip
 
       - name: Upload Release linux zip
@@ -127,9 +159,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/Integem iCreator_linux_${{steps.package.outputs.version}}.zip
-          asset_name: Integem iCreator_linux_${{steps.package.outputs.version}}.zip
+          upload_url: ${{ steps.package.outputs.content }}
+          asset_path: build/Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
+          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
           asset_content_type: application/zip
 
       - name: Upload Release windows app
@@ -138,9 +170,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/Integem iCreator Setup ${{steps.package.outputs.version}}.exe
-          asset_name: Integem iCreator Setup ${{steps.package.outputs.version}}.exe
+          upload_url: ${{ steps.package.outputs.content }}
+          asset_path: build/Integem iCreator Setup ${{ steps.package.outputs.version }}.exe
+          asset_name: Integem iCreator Setup ${{ steps.package.outputs.version }}.exe
           asset_content_type: application/x-executable
 
       - name: Upload Release macos app
@@ -149,9 +181,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/Integem iCreator-${{steps.package.outputs.version}}.dmg
-          asset_name: Integem iCreator-${{steps.package.outputs.version}}.dmg
+          upload_url: ${{ steps.package.outputs.content }}
+          asset_path: build/Integem iCreator-${{ steps.package.outputs.version }}.dmg
+          asset_name: Integem iCreator-${{ steps.package.outputs.version }}.dmg
           asset_content_type: application/x-executable
 
       - name: Upload Release linux app
@@ -160,7 +192,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/integem-creator_${{steps.package.outputs.version}}_amd64.deb
-          asset_name: integem-creator_${{steps.package.outputs.version}}_amd64.deb
+          upload_url: ${{ steps.package.outputs.content }}
+          asset_path: build/integem-creator_${{ steps.package.outputs.version }}_amd64.deb
+          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64.deb
           asset_content_type: application/x-executable
