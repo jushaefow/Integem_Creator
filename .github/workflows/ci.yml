@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  release:
+  notools:
     runs-on: ${{matrix.os}}
     
     strategy:
@@ -32,6 +32,9 @@ jobs:
       
       - name: build
         run: npm run build:chromebook
+      
+      - name: deploy
+        run: npm run upload:null
 
       - name: get package version
         id: package
@@ -46,8 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{steps.package.outputs.version}}-${{ matrix.node }}-chromebook
-          release_name: 'V${{steps.package.outputs.version}} ${{ matrix.node }} chromebook'
+          tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}-noTools
+          release_name: 'V${{steps.package.outputs.version}} [node${{ matrix.node }}] [${{matrix.os}}] [noTools]'
           draft: false
           prerelease: false
 
@@ -66,7 +69,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/integem-creator_${{ steps.package.outputs.version }}_amd64.deb
-          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64_chromebook.deb
+          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64_notools.deb
           asset_content_type: application/x-executable
           
       - name: Upload Release linux zip
@@ -76,10 +79,10 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}_chromebook.zip
+          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}_notools.zip
           asset_content_type: application/zip
 
-  build:
+  tools:
 #     needs: [release]
 
     runs-on: ${{matrix.os}}
@@ -173,7 +176,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}
-          release_name: 'V${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}'
+          release_name: 'V${{steps.package.outputs.version}} [node${{ matrix.node }}] [${{matrix.os}}]'
           draft: false
           prerelease: false
 
