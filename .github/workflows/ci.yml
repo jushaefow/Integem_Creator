@@ -3,6 +3,47 @@ name: CI
 on: [push]
 
 jobs:
+  release:
+    name: Release
+
+    runs-on: macos
+
+    steps:
+
+      - name: init
+        uses: actions/checkout@v1
+
+      - name: get package
+        id: package
+        uses: Ireoo/get-package@v1
+        with:
+          path: package.json
+          key: version
+
+      - name: create release
+        id: release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: v${{steps.package.outputs.version}}
+          release_name: V${{steps.package.outputs.version}}
+          draft: false
+          prerelease: false
+
+      - name: init cache
+        env:
+          git_cache: ${{secrets.GIT_CACHE}}
+          upload_url: ${{steps.release.outputs.upload_url}}
+          github_sha: ${{github.sha}}
+        run: |
+          git clone $git_cache cache
+          cd cache
+          echo "$upload_url" > $github_sha.txt
+          git add $github_sha.txt
+          git commit -m "$github_sha"
+          git push
+     
   notools:
     runs-on: ${{matrix.os}}
     
@@ -43,16 +84,27 @@ jobs:
           path: ./package.json
           key: version
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
+#       - name: Create Release
+#         id: create_release
+#         uses: actions/create-release@v1.0.0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}-noTools
+#           release_name: 'V${{steps.package.outputs.version}} [node${{ matrix.node }}] [${{matrix.os}}] [noTools]'
+#           draft: false
+#           prerelease: false
+    
+      - name: init cache
+        id: cache
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}-noTools
-          release_name: 'V${{steps.package.outputs.version}} [node${{ matrix.node }}] [${{matrix.os}}] [noTools]'
-          draft: false
-          prerelease: false
+          git_cache: ${{secrets.GIT_CACHE}}
+          github_sha: ${{github.sha}}
+        run: |
+          git clone $git_cache cache
+          cd cache
+          echo "::set-output name=upload_url::$(cat $github_sha.txt)"
 
 #       - name: save Release
 #         shell: bash
@@ -67,7 +119,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.cache.outputs.upload_url }}
           asset_path: build/integem-creator_${{ steps.package.outputs.version }}_amd64.deb
           asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64_notools.deb
           asset_content_type: application/x-executable
@@ -77,7 +129,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.cache.outputs.upload_url }}
           asset_path: build/Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
           asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}_notools.zip
           asset_content_type: application/zip
@@ -169,16 +221,27 @@ jobs:
       - name: deploy
         run: npm run upload:null
       
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
+#       - name: Create Release
+#         id: create_release
+#         uses: actions/create-release@v1.0.0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}
+#           release_name: 'V${{steps.package.outputs.version}} [node${{ matrix.node }}] [${{matrix.os}}]'
+#           draft: false
+#           prerelease: false
+
+      - name: init cache
+        id: cache
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}
-          release_name: 'V${{steps.package.outputs.version}} [node${{ matrix.node }}] [${{matrix.os}}]'
-          draft: false
-          prerelease: false
+          git_cache: ${{secrets.GIT_CACHE}}
+          github_sha: ${{github.sha}}
+        run: |
+          git clone $git_cache cache
+          cd cache
+          echo "::set-output name=upload_url::$(cat $github_sha.txt)"
 
       - name: Upload Release windows zip
         if: startsWith(matrix.os, 'windows-latest')
@@ -186,9 +249,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.cache.outputs.upload_url }}
           asset_path: build/Integem iCreator_win_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_win_${{ steps.package.outputs.version }}.zip
+          asset_name: Integem iCreator_win_${{ steps.package.outputs.version }}_tools.zip
           asset_content_type: application/zip
 
       - name: Upload Release macos zip
@@ -197,9 +260,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.cache.outputs.upload_url }}
           asset_path: build/Integem iCreator_mac_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_mac_${{ steps.package.outputs.version }}.zip
+          asset_name: Integem iCreator_mac_${{ steps.package.outputs.version }}_tools.zip
           asset_content_type: application/zip
 
       - name: Upload Release linux zip
@@ -208,9 +271,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.cache.outputs.upload_url }}
           asset_path: build/Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
+          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}_tools.zip
           asset_content_type: application/zip
 
       - name: Upload Release windows app
@@ -219,9 +282,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.cache.outputs.upload_url }}
           asset_path: build/Integem iCreator Setup ${{ steps.package.outputs.version }}.exe
-          asset_name: Integem iCreator Setup ${{ steps.package.outputs.version }}.exe
+          asset_name: Integem iCreator Setup ${{ steps.package.outputs.version }}_tools.exe
           asset_content_type: application/x-executable
 
       - name: Upload Release macos app
@@ -232,7 +295,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/Integem iCreator-${{ steps.package.outputs.version }}.dmg
-          asset_name: Integem iCreator-${{ steps.package.outputs.version }}.dmg
+          asset_name: Integem iCreator-${{ steps.package.outputs.version }}_tools.dmg
           asset_content_type: application/x-executable
 
       - name: Upload Release linux app
@@ -243,5 +306,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/integem-creator_${{ steps.package.outputs.version }}_amd64.deb
-          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64.deb
+          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64_tools.deb
           asset_content_type: application/x-executable
