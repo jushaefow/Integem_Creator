@@ -90,18 +90,25 @@ jobs:
         with:
           path: ./package.json
           key: version
-          content: url.txt
 
-      # - name: Create Release
-      #   id: create_release
-      #   uses: actions/create-release@v1.0.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}
-      #     release_name: 'V${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}'
-      #     draft: false
-      #     prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}
+          release_name: 'V${{steps.package.outputs.version}}-${{matrix.node}}-${{matrix.os}}'
+          draft: false
+          prerelease: false
+
+      - name: save Release
+        shell: bash
+        env:
+          url: ${{ steps.create_release.outputs.upload_url }}
+        run: |
+          echo '$url'
+          echo '$url' > url.txt
 
       #      - name: upload macos zip
       #        uses: actions/upload-artifact@master
