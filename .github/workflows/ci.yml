@@ -3,42 +3,53 @@ name: CI
 on: [push]
 
 jobs:
-#   release:
-#     runs-on: macos
+  release:
+    runs-on: ${{matrix.os}}
+    
+    strategy:
+      matrix:
+        node: [12]
+        os: [ubuntu-latest]
 
-#     steps:
-#       - name: init
-#         uses: actions/checkout@master
-#         with:
-#           node-version: ${{ matrix.node }}
+    steps:
+      - name: init
+        uses: actions/checkout@master
+        with:
+          node-version: ${{ matrix.node }}
 
-#       - name: clone
-#         run: |
-#           ls -alF
-#           rm -rf *
-#           rm -rf .git
-#           rm -rf .github
-#           ls -alF
-#           git clone ${{secrets.GIT_ADDRESS}} .
-#         shell: bash
+      - name: clone
+        run: |
+          ls -alF
+          rm -rf *
+          rm -rf .git
+          rm -rf .github
+          ls -alF
+          git clone ${{secrets.GIT_ADDRESS}} .
+        shell: bash
+      
+      - name: install
+        run: npm i
+      
+      - name: build
+        run: npm run build:chromebook
 
-#       - name: get package version
-#         id: package
-#         uses: Ireoo/get-package@v1
-#         with:
-#           path: ./package.json
-#           key: version
+      - name: get package version
+        id: package
+        uses: Ireoo/get-package@v1
+        with:
+          path: ./package.json
+          key: version
 
-#       - name: Create Release
-#         id: create_release
-#         uses: actions/create-release@v1.0.0
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           tag_name: v${{steps.package.outputs.version}}
-#           release_name: 'V${{steps.package.outputs.version}}'
-#           draft: false
-#           prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{steps.package.outputs.version}}-${{ matrix.node }}-chromebook
+          release_name: 'V${{steps.package.outputs.version}} ${{ matrix.node }} chromebook'
+          draft: false
+          prerelease: false
 
 #       - name: save Release
 #         shell: bash
@@ -47,6 +58,26 @@ jobs:
 #         run: |
 #           echo '$url'
 #           echo '$url' > url.txt
+          
+      - name: Upload Release linux app
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/integem-creator_${{ steps.package.outputs.version }}_amd64.deb
+          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64_chromebook.deb
+          asset_content_type: application/x-executable
+          
+      - name: Upload Release linux zip
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
+          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}_chromebook.zip
+          asset_content_type: application/zip
 
   build:
 #     needs: [release]
