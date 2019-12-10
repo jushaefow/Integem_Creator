@@ -45,6 +45,8 @@ jobs:
           git push
      
   notools:
+    needs: [release]
+    
     runs-on: ${{matrix.os}}
     
     strategy:
@@ -135,7 +137,7 @@ jobs:
           asset_content_type: application/zip
 
   tools:
-#     needs: [release]
+    needs: [release]
 
     runs-on: ${{matrix.os}}
 
