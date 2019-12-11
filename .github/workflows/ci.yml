@@ -100,6 +100,13 @@ jobs:
           path: ./package.json
           key: version
     
+      - name: get package productName
+        id: package1
+        uses: Ireoo/get-package@v1
+        with:
+          path: package.json
+          key: productName
+    
       - name: init cache
         id: cache
         shell: bash
@@ -118,8 +125,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator_win_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_win_${{ steps.package.outputs.version }}_noTools.zip
+          asset_path: build/${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}.zip
+          asset_name: ${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}_noTools.zip
           asset_content_type: application/zip
 
       - name: Upload Release macos zip
@@ -129,8 +136,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator_mac_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_mac_${{ steps.package.outputs.version }}_noTools.zip
+          asset_path: build/${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}.zip
+          asset_name: ${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}_noTools.zip
           asset_content_type: application/zip
 
       - name: Upload Release linux zip
@@ -140,8 +147,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}_noTools.zip
+          asset_path: build/${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}.zip
+          asset_name: ${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}_noTools.zip
           asset_content_type: application/zip
 
       - name: Upload Release windows app
@@ -151,8 +158,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator Setup ${{ steps.package.outputs.version }}.exe
-          asset_name: Integem iCreator Setup ${{ steps.package.outputs.version }}_noTools.exe
+          asset_path: build/${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}.exe
+          asset_name: ${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}_noTools.exe
           asset_content_type: application/x-executable
 
       - name: Upload Release macos app
@@ -162,8 +169,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator-${{ steps.package.outputs.version }}.dmg
-          asset_name: Integem iCreator-${{ steps.package.outputs.version }}_noTools.dmg
+          asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.dmg
+          asset_name: ${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}_noTools.dmg
           asset_content_type: application/x-executable
 
       - name: Upload Release linux app
@@ -173,8 +180,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/integem-creator_${{ steps.package.outputs.version }}_amd64.deb
-          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64_noTools.deb
+          asset_path: build/${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64.deb
+          asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64_noTools.deb
           asset_content_type: application/x-executable
 
   tools:
@@ -220,6 +227,13 @@ jobs:
           path: ./package.json
           key: version
 
+      - name: get package productName
+        id: package1
+        uses: Ireoo/get-package@v1
+        with:
+          path: package.json
+          key: productName
+
       - name: deploy
         run: npm run upload:null
 
@@ -241,8 +255,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator_win_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_win_${{ steps.package.outputs.version }}_tools.zip
+          asset_path: build/${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}.zip
+          asset_name: ${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}_tools.zip
           asset_content_type: application/zip
 
       - name: Upload Release macos zip
@@ -252,8 +266,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator_mac_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_mac_${{ steps.package.outputs.version }}_tools.zip
+          asset_path: build/${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}.zip
+          asset_name: ${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}_tools.zip
           asset_content_type: application/zip
 
       - name: Upload Release linux zip
@@ -263,8 +277,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator_linux_${{ steps.package.outputs.version }}.zip
-          asset_name: Integem iCreator_linux_${{ steps.package.outputs.version }}_tools.zip
+          asset_path: build/${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}.zip
+          asset_name: ${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}_tools.zip
           asset_content_type: application/zip
 
       - name: Upload Release windows app
@@ -274,8 +288,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator Setup ${{ steps.package.outputs.version }}.exe
-          asset_name: Integem iCreator Setup ${{ steps.package.outputs.version }}_tools.exe
+          asset_path: build/${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}.exe
+          asset_name: ${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}_tools.exe
           asset_content_type: application/x-executable
 
       - name: Upload Release macos app
@@ -285,8 +299,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/Integem iCreator-${{ steps.package.outputs.version }}.dmg
-          asset_name: Integem iCreator-${{ steps.package.outputs.version }}_tools.dmg
+          asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.dmg
+          asset_name: ${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}_tools.dmg
           asset_content_type: application/x-executable
 
       - name: Upload Release linux app
@@ -296,6 +310,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/integem-creator_${{ steps.package.outputs.version }}_amd64.deb
-          asset_name: integem-creator_${{ steps.package.outputs.version }}_amd64_tools.deb
+          asset_path: build/${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64.deb
+          asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64_tools.deb
           asset_content_type: application/x-executable
