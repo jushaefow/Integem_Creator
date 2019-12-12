@@ -126,6 +126,7 @@ jobs:
           upload_url: ${{ steps.cache.outputs.upload_url }}
           dir: build
           exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
+          suffix: _noTools
           
 #       - name: Upload Release windows zip
 #         if: startsWith(matrix.os, 'windows')
@@ -276,6 +277,7 @@ jobs:
           upload_url: ${{ steps.cache.outputs.upload_url }}
           dir: build
           exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
+          suffix: _tools
 
 #       - name: Upload Release windows zip
 #         if: startsWith(matrix.os, 'windows')
