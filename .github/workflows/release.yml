@@ -125,7 +125,7 @@ jobs:
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
           dir: build
-          ext: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
+          exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
           
 #       - name: Upload Release windows zip
 #         if: startsWith(matrix.os, 'windows')
@@ -275,7 +275,7 @@ jobs:
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
           dir: build
-          ext: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
+          exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
 
 #       - name: Upload Release windows zip
 #         if: startsWith(matrix.os, 'windows')
