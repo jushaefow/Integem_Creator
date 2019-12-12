@@ -117,83 +117,92 @@ jobs:
           git clone $git_cache cache
           cd cache
           echo "::set-output name=upload_url::$(cat $github_sha.txt)"
+
+      - name: Upload Release
+        uses: Ireoo/upload-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.cache.outputs.upload_url }}
+          dir: build
+          ext: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
           
-      - name: Upload Release windows zip
-        if: startsWith(matrix.os, 'windows')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}.zip
-          asset_name: ${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}_noTools.zip
-          asset_content_type: application/zip
+#       - name: Upload Release windows zip
+#         if: startsWith(matrix.os, 'windows')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}.zip
+#           asset_name: ${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}_noTools.zip
+#           asset_content_type: application/zip
 
-      - name: Upload Release macos zip
-        if: startsWith(matrix.os, 'macOS')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}.zip
-          asset_name: ${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}_noTools.zip
-          asset_content_type: application/zip
+#       - name: Upload Release macos zip
+#         if: startsWith(matrix.os, 'macOS')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}.zip
+#           asset_name: ${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}_noTools.zip
+#           asset_content_type: application/zip
 
-      - name: Upload Release linux zip
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}.zip
-          asset_name: ${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}_noTools.zip
-          asset_content_type: application/zip
+#       - name: Upload Release linux zip
+#         if: startsWith(matrix.os, 'ubuntu')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}.zip
+#           asset_name: ${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}_noTools.zip
+#           asset_content_type: application/zip
 
-      - name: Upload Release windows exe
-        if: startsWith(matrix.os, 'windows')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}.exe
-          asset_name: ${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}_noTools.exe
-          asset_content_type: application/x-executable
+#       - name: Upload Release windows exe
+#         if: startsWith(matrix.os, 'windows')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}.exe
+#           asset_name: ${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}_noTools.exe
+#           asset_content_type: application/x-executable
 
-      - name: Upload Release macos dmg
-        if: startsWith(matrix.os, 'macOS')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.dmg
-          asset_name: ${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}_noTools.dmg
-          asset_content_type: application/x-executable
+#       - name: Upload Release macos dmg
+#         if: startsWith(matrix.os, 'macOS')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.dmg
+#           asset_name: ${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}_noTools.dmg
+#           asset_content_type: application/x-executable
 
-      - name: Upload Release linux deb
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64.deb
-          asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64_noTools.deb
-          asset_content_type: application/x-executable
+#       - name: Upload Release linux deb
+#         if: startsWith(matrix.os, 'ubuntu')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64.deb
+#           asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64_noTools.deb
+#           asset_content_type: application/x-executable
 
-      - name: Upload Release linux rpm
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.x86_64.rpm
-          asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_x86_64_noTools.rpm
-          asset_content_type: application/x-executable
+#       - name: Upload Release linux rpm
+#         if: startsWith(matrix.os, 'ubuntu')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.x86_64.rpm
+#           asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_x86_64_noTools.rpm
+#           asset_content_type: application/x-executable
 
   tools:
     needs: [release]
@@ -258,80 +267,89 @@ jobs:
           git clone $git_cache cache
           cd cache
           echo "::set-output name=upload_url::$(cat $github_sha.txt)"
-
-      - name: Upload Release windows zip
-        if: startsWith(matrix.os, 'windows')
-        uses: actions/upload-release-asset@v1.0.1
+          
+      - name: Upload Release
+        uses: Ireoo/upload-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}.zip
-          asset_name: ${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}_tools.zip
-          asset_content_type: application/zip
+          dir: build
+          ext: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi"]'
 
-      - name: Upload Release macos zip
-        if: startsWith(matrix.os, 'macOS')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}.zip
-          asset_name: ${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}_tools.zip
-          asset_content_type: application/zip
+#       - name: Upload Release windows zip
+#         if: startsWith(matrix.os, 'windows')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}.zip
+#           asset_name: ${{steps.package1.outputs.productName}}_win_${{ steps.package.outputs.version }}_tools.zip
+#           asset_content_type: application/zip
 
-      - name: Upload Release linux zip
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}.zip
-          asset_name: ${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}_tools.zip
-          asset_content_type: application/zip
+#       - name: Upload Release macos zip
+#         if: startsWith(matrix.os, 'macOS')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}.zip
+#           asset_name: ${{steps.package1.outputs.productName}}_mac_${{ steps.package.outputs.version }}_tools.zip
+#           asset_content_type: application/zip
 
-      - name: Upload Release windows exe
-        if: startsWith(matrix.os, 'windows')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}.exe
-          asset_name: ${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}_tools.exe
-          asset_content_type: application/x-executable
+#       - name: Upload Release linux zip
+#         if: startsWith(matrix.os, 'ubuntu')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}.zip
+#           asset_name: ${{steps.package1.outputs.productName}}_linux_${{ steps.package.outputs.version }}_tools.zip
+#           asset_content_type: application/zip
 
-      - name: Upload Release macos dmg
-        if: startsWith(matrix.os, 'macOS')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.dmg
-          asset_name: ${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}_tools.dmg
-          asset_content_type: application/x-executable
+#       - name: Upload Release windows exe
+#         if: startsWith(matrix.os, 'windows')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}.exe
+#           asset_name: ${{steps.package1.outputs.productName}} Setup ${{ steps.package.outputs.version }}_tools.exe
+#           asset_content_type: application/x-executable
 
-      - name: Upload Release linux deb
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64.deb
-          asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64_tools.deb
-          asset_content_type: application/x-executable
+#       - name: Upload Release macos dmg
+#         if: startsWith(matrix.os, 'macOS')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.dmg
+#           asset_name: ${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}_tools.dmg
+#           asset_content_type: application/x-executable
 
-      - name: Upload Release linux rpm
-        if: startsWith(matrix.os, 'ubuntu')
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.cache.outputs.upload_url }}
-          asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.x86_64.rpm
-          asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_x86_64_tools.rpm
-          asset_content_type: application/x-executable
+#       - name: Upload Release linux deb
+#         if: startsWith(matrix.os, 'ubuntu')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64.deb
+#           asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_amd64_tools.deb
+#           asset_content_type: application/x-executable
+
+#       - name: Upload Release linux rpm
+#         if: startsWith(matrix.os, 'ubuntu')
+#         uses: actions/upload-release-asset@v1.0.1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.cache.outputs.upload_url }}
+#           asset_path: build/${{steps.package1.outputs.productName}}-${{ steps.package.outputs.version }}.x86_64.rpm
+#           asset_name: ${{steps.package1.outputs.productName}}_${{ steps.package.outputs.version }}_x86_64_tools.rpm
+#           asset_content_type: application/x-executable
