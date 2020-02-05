@@ -143,6 +143,9 @@ jobs:
           dir: build
           exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi", "pkg", "appx"]'
           suffix: _noTools
+      
+      - name: Upload to tools.integem.com
+        run: npm run upload
           
 #       - name: Upload Release windows zip
 #         if: startsWith(matrix.os, 'windows')
@@ -302,6 +305,9 @@ jobs:
           dir: build
           exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi", "pkg", "appx"]'
           suffix: _tools
+          
+      - name: Upload to tools.integem.com
+        run: npm run upload
 
 #       - name: Upload Release windows zip
 #         if: startsWith(matrix.os, 'windows')
