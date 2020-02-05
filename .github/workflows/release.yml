@@ -145,7 +145,7 @@ jobs:
           suffix: _noTools
       
       - name: Upload to tools.integem.com
-        run: npm run upload
+        run: npm run upload noTools
           
 #       - name: Upload Release windows zip
 #         if: startsWith(matrix.os, 'windows')
