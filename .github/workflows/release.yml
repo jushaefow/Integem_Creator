@@ -68,6 +68,7 @@ jobs:
     runs-on: ${{matrix.os}}-latest
     
     strategy:
+      fail-fast: false
       matrix:
         node: [12]
         os: [ubuntu, macOS, windows]
@@ -230,6 +231,7 @@ jobs:
     runs-on: ${{matrix.os}}-latest
 
     strategy:
+      fail-fast: false
       matrix:
         node: [12]
         os: [macOS, ubuntu, windows]
