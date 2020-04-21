@@ -71,7 +71,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [12]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-10.14, windows-latest]
 
     steps:
       - name: init
@@ -100,9 +100,9 @@ jobs:
       - name: install
         run: npm i
       
-      - name: install electron-builder with macos latest
-        if: startsWith(matrix.os, 'macOS')
-        run: npm i electron-builder@21.2.0
+#       - name: install electron-builder with macos latest
+#         if: startsWith(matrix.os, 'macOS')
+#         run: npm i electron-builder@21.2.0
       
       - name: build
         run: npm run build:chromebook
@@ -157,7 +157,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [12]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-10.14, windows-latest]
 
     steps:
       - name: init
@@ -186,9 +186,9 @@ jobs:
       - name: install
         run: npm i
 
-      - name: install electron-builder with macos latest
-        if: startsWith(matrix.os, 'macOS')
-        run: npm i electron-builder@21.2.0
+#       - name: install electron-builder with macos latest
+#         if: startsWith(matrix.os, 'macOS')
+#         run: npm i electron-builder@21.2.0
 
       - name: build
         run: npm run build
