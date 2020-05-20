@@ -17,10 +17,10 @@ jobs:
       - name: init
         uses: actions/checkout@v1
       
-      - name: get sha
-        id: sha
-        shell: bash
-        run: echo "::set-output name=value::$(cat sha.txt)"
+#       - name: get sha
+#         id: sha
+#         shell: bash
+#         run: echo "::set-output name=value::$(cat sha.txt)"
 
       - name: clone
         env:
@@ -32,7 +32,6 @@ jobs:
           rm -rf .github
           ls -alF
           git clone ${{secrets.GIT_ADDRESS}} .
-          git checkout $sha
         shell: bash
 
       - name: get package
@@ -91,10 +90,10 @@ jobs:
         with:
           node-version: 3.8 
 
-      - name: get sha
-        id: sha
-        shell: bash
-        run: echo "::set-output name=value::$(cat sha.txt)"
+#       - name: get sha
+#         id: sha
+#         shell: bash
+#         run: echo "::set-output name=value::$(cat sha.txt)"
 
       - name: clone
         env:
@@ -106,7 +105,6 @@ jobs:
           rm -rf .github
           ls -alF
           git clone ${{secrets.GIT_ADDRESS}} .
-          git checkout $sha
         shell: bash
       
       - name: install
@@ -185,10 +183,10 @@ jobs:
         with:
           node-version: 3.8 
 
-      - name: get sha
-        id: sha
-        shell: bash
-        run: echo "::set-output name=value::$(cat sha.txt)"
+#       - name: get sha
+#         id: sha
+#         shell: bash
+#         run: echo "::set-output name=value::$(cat sha.txt)"
 
       - name: clone
         env:
@@ -200,7 +198,6 @@ jobs:
           rm -rf .github
           ls -alF
           git clone ${{secrets.GIT_ADDRESS}} .
-          git checkout $sha
         shell: bash
 
       - name: install
