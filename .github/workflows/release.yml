@@ -61,8 +61,8 @@ jobs:
           git clone $git_cache cache
           cd cache
           echo "$upload_url" > $github_sha.txt
-          git config --global user.email "jack.wang@integem.com"
-          git config --global user.name "Jack Wang"
+          git config user.email "jack.wang@integem.com"
+          git config user.name "Jack Wang"
           git add $github_sha.txt
           git commit -m "$github_sha"
           git push
