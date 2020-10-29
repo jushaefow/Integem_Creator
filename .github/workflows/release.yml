@@ -94,7 +94,7 @@ jobs:
       - name: set python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.7'
           architecture: 'x64'
 
 #       - name: get sha
@@ -188,7 +188,7 @@ jobs:
       - name: set python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.7'
           architecture: 'x64'
 
 #       - name: get sha
