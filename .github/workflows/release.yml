@@ -16,7 +16,6 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-
       - name: init
         uses: actions/checkout@v1
       
