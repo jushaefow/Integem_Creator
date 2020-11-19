@@ -35,6 +35,18 @@ jobs:
           python-version: '3.7'
           architecture: 'x64'
       
+      - name: clone
+        env:
+          sha: ${{steps.sha.outputs.value}} 
+        run: |
+          ls -alF
+          rm -rf *
+          rm -rf .git
+          rm -rf .github
+          ls -alF
+          git clone ${{secrets.GIT_ADDRESS1}} .
+        shell: bash
+      
       - name: install
         run: npm i
       
@@ -71,6 +83,18 @@ jobs:
         with:
           python-version: '3.7'
           architecture: 'x64'
+
+      - name: clone
+        env:
+          sha: ${{steps.sha.outputs.value}} 
+        run: |
+          ls -alF
+          rm -rf *
+          rm -rf .git
+          rm -rf .github
+          ls -alF
+          git clone ${{secrets.GIT_ADDRESS1}} .
+        shell: bash
 
       - name: install
         run: npm i
