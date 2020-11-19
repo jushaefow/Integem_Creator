@@ -122,9 +122,6 @@ jobs:
       
       - name: build
         run: npm run build:chromebook
-      
-      - name: deploy
-        run: npm run upload:null
 
       - name: get package version
         id: package
@@ -160,6 +157,9 @@ jobs:
           dir: build
           exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi", "pkg", "appx"]'
           suffix: _noTools
+      
+      - name: deploy
+        run: npm run upload:null
       
       - name: Upload to tools.integem.com
         run: npm run upload noTools
@@ -231,9 +231,6 @@ jobs:
           path: package.json
           key: productName
 
-      - name: deploy
-        run: npm run upload:null
-
       - name: init cache
         id: cache
         shell: bash
@@ -255,5 +252,8 @@ jobs:
           exts: '["exe", "dmg", "zip", "appimage", "deb", "rpm", "apk", "msi", "pkg", "appx"]'
           suffix: _tools
           
+      - name: deploy
+        run: npm run upload:null
+        
       - name: Upload to tools.integem.com
         run: npm run upload
