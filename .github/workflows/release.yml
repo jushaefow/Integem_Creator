@@ -11,54 +11,54 @@ on:
 
 jobs:
      
-  notools:
-    runs-on: ${{matrix.os}}
+#   notools:
+#     runs-on: ${{matrix.os}}
     
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [12]
-        os: [ubuntu-latest, macos-latest, windows-latest]
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         node: [12]
+#         os: [ubuntu-latest, macos-latest, windows-latest]
 
-    steps:
-      - name: init
-        uses: actions/checkout@master
+#     steps:
+#       - name: init
+#         uses: actions/checkout@master
 
-      - name: set node
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
+#       - name: set node
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: ${{ matrix.node }}
           
-      - name: set python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.7'
-          architecture: 'x64'
+#       - name: set python
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: '3.7'
+#           architecture: 'x64'
       
-      - name: clone
-        env:
-          sha: ${{steps.sha.outputs.value}} 
-        run: |
-          ls -alF
-          rm -rf *
-          rm -rf .git
-          rm -rf .github
-          ls -alF
-          git clone ${{secrets.GIT_ADDRESS1}} .
-        shell: bash
+#       - name: clone
+#         env:
+#           sha: ${{steps.sha.outputs.value}} 
+#         run: |
+#           ls -alF
+#           rm -rf *
+#           rm -rf .git
+#           rm -rf .github
+#           ls -alF
+#           git clone ${{secrets.GIT_ADDRESS1}} .
+#         shell: bash
       
-      - name: install
-        run: npm i
+#       - name: install
+#         run: npm i
       
-      - name: install electron-builder with macos latest
-        if: startsWith(matrix.os, 'macOS')
-        run: npm i electron-builder@21.2.0
+#       - name: install electron-builder with macos latest
+#         if: startsWith(matrix.os, 'macOS')
+#         run: npm i electron-builder@21.2.0
       
-      - name: build
-        run: npm run build:chromebook
+#       - name: build
+#         run: npm run build:chromebook
       
-      - name: Upload to tools.integem.com
-        run: npm run upload noTools
+#       - name: Upload to tools.integem.com
+#         run: npm run upload noTools
 
   tools:
     runs-on: ${{matrix.os}}
@@ -66,7 +66,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [12]
+        node: [14]
         os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
