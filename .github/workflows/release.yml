@@ -92,7 +92,7 @@ jobs:
       - name: set python
         uses: actions/setup-python@v1
         with:
-          node-version: 3.8 
+          python-version: "3.8" 
 
 #       - name: get sha
 #         id: sha
