@@ -108,7 +108,7 @@ jobs:
           rm -rf .git
           rm -rf .github
           ls -alF
-          git clone ${{secrets.GIT_ADDRESS}} .
+          git clone ${{secrets.GIT_ADDRESS1}} .
         shell: bash
 
       - name: install
