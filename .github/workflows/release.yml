@@ -118,6 +118,9 @@ jobs:
         if: startsWith(matrix.os, 'macOS')
         run: npm i electron-builder@21.2.0
 
+      - name: win
+        run: npm run win
+        
       - name: build
         run: npm run build
 
