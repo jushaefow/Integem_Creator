@@ -36,32 +36,30 @@ jobs:
 #         shell: bash
 #         run: echo "::set-output name=value::$(cat sha.txt)"
 
-#       - name: clone
-#         env:
-#           sha: ${{steps.sha.outputs.value}} 
-#         run: |
-#           ls -alF
-#           rm -rf *
-#           rm -rf .git
-#           rm -rf .github
-#           ls -alF
-#           git clone ${{secrets.GIT_ADDRESS1}} .
-#         shell: bash
+      - name: clone
+        env:
+          sha: ${{steps.sha.outputs.value}} 
+        run: |
+          ls -alF
+          rm -rf *
+          rm -rf .git
+          rm -rf .github
+          ls -alF
+          git clone ${{secrets.GIT_ADDRESS1}} .
+        shell: bash
 
-#       - name: install
-#         run: npm i
+      - name: install
+        run: npm i
 
       - name: install electron-builder with macos latest
         if: startsWith(matrix.os, 'macOS')
-        run: |
-          brew search python
-          brew install python@2
+        run: npm i electron-builder@latest
 
-#       - name: win
-#         run: npm run win
+      - name: win
+        run: npm run win
         
       - name: test
         run: /usr/bin/python --version
         
-#       - name: build
-#         run: npm run build
+      - name: build
+        run: npm run build
