@@ -1,1 +1,65 @@
+name: Release
 
+# on:
+#   schedule:
+#     # * is a special character in YAML so you have to quote this string
+#     - cron: "5 * * * *"
+on: [push]
+
+jobs:
+  tools:
+
+    runs-on: ${{matrix.os}}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [16]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+
+    steps:
+      - name: init
+        uses: actions/checkout@master
+
+      - name: set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          
+      - name: set python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8" 
+
+#       - name: get sha
+#         id: sha
+#         shell: bash
+#         run: echo "::set-output name=value::$(cat sha.txt)"
+
+      - name: clone
+        env:
+          sha: ${{steps.sha.outputs.value}} 
+        run: |
+          ls -alF
+          rm -rf *
+          rm -rf .git
+          rm -rf .github
+          ls -alF
+          git clone ${{secrets.GIT_ADDRESS1}} .
+        shell: bash
+
+      - name: install
+        run: npm i
+
+      - name: install electron-builder with macos latest
+        if: startsWith(matrix.os, 'macOS')
+        run: npm i electron-builder@23.0.0
+
+      - name: win
+        run: npm run win
+        
+      - name: test
+        run: /usr/bin/python --version
+        
+      - name: build
+        run: npm run build
