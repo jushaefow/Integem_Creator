@@ -90,7 +90,7 @@ jobs:
           node-version: ${{ matrix.node }}
           
       - name: set python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: "3.8" 
 
@@ -118,11 +118,11 @@ jobs:
 #         if: startsWith(matrix.os, 'macOS')
 #         run: npm i electron-builder@21.2.0
 
-      - name: win
-        run: npm run win
+#       - name: win
+#         run: npm run win
         
       - name: build
-        run: npm run build
+        run: python --version && npm run build
 
       - name: get package version
         id: package
