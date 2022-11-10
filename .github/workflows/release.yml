@@ -77,7 +77,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [14]
+        node: [16]
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: set node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           
