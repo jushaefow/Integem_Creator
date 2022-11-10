@@ -53,7 +53,7 @@ jobs:
 
       - name: install electron-builder with macos latest
         if: startsWith(matrix.os, 'macOS')
-        run: npm i electron-builder@23.0.0
+        run: npm i electron-builder@23.0.0 && brew install python
 
       - name: win
         run: npm run win
