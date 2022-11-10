@@ -78,7 +78,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [16]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-12, windows-latest]
 
     steps:
       - name: init
@@ -92,7 +92,7 @@ jobs:
       - name: set python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10" 
+          python-version: "3.8" 
 
 #       - name: get sha
 #         id: sha
@@ -114,12 +114,12 @@ jobs:
       - name: install
         run: npm i
 
-#       - name: install electron-builder with macos latest
-#         if: startsWith(matrix.os, 'macOS')
-#         run: npm i electron-builder@21.2.0
+      - name: install electron-builder with macos latest
+        if: startsWith(matrix.os, 'macOS')
+        run: npm i electron-builder@21.2.0
 
-#       - name: win
-#         run: npm run win
+      - name: win
+        run: npm run win
         
       - name: build
         run: python --version && npm run build
