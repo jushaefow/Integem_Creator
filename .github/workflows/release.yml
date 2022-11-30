@@ -119,14 +119,13 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
         
-#       - name: install Cairo with window latest
-#         if: startsWith(matrix.os, 'windows')
-#         run: npm i -g windows-build-tools
+      - name: install Cairo with window latest
+        if: startsWith(matrix.os, 'windows')
+        run: choco install -y python2 gtk-runtime microsoft-build-tools libjpeg-turbo
 
       - name: install
         run: |
          npm i
-         npm i fabric@5
 
       - name: install electron-builder with macos latest
         if: startsWith(matrix.os, 'macOS')
