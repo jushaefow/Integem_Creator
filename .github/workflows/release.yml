@@ -125,8 +125,8 @@ jobs:
 
       - name: install
         run: |
-         npm install --build-from-source canvas
          npm i
+         npm i fabric@5
 
       - name: install electron-builder with macos latest
         if: startsWith(matrix.os, 'macOS')
