@@ -124,7 +124,9 @@ jobs:
 #         run: npm i -g windows-build-tools
 
       - name: install
-        run: yarn #npm i
+        run: |
+         npm install --build-from-source canvas
+         npm i
 
       - name: install electron-builder with macos latest
         if: startsWith(matrix.os, 'macOS')
