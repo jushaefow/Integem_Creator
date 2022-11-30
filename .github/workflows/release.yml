@@ -118,6 +118,10 @@ jobs:
       - name: install Cairo with ubuntu latest
         if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+        
+      - name: install Cairo with window latest
+        if: startsWith(matrix.os, 'windows')
+        run: npm i -g windows-build-tools
 
       - name: install
         run: npm i
